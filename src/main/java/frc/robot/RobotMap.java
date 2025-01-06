@@ -6,6 +6,8 @@ public final class RobotMap {
 
   public static final class SwerveConstants {
 
+    public static final int pigeon2ID = 0;
+
     public static final class Mod0 {
       public static final int driveMotorID = 0;
       public static final int angleMotorID = 0;
