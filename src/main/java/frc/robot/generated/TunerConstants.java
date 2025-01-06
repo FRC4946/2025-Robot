@@ -92,9 +92,8 @@ public class TunerConstants {
   // This may need to be tuned to your individual robot
   private static final double kCoupleRatio = 3.8181818181818183;
 
-  private static final double kDriveGearRatio =
-      (425 / 63); // TODO This is for the L2 gear ratio, recalculate once we know the gear ratio we
-  // will be using
+  private static final double kDriveGearRatio = (425 / 63); // TODO This is for the L2 gear ratio
+  // 5.2469:1 for Zeus
   private static final double kSteerGearRatio = (150 / 7);
   private static final Distance kWheelRadius =
       Inches.of(Constants.SwerveConstants.wheelDiameter / 2);
@@ -160,7 +159,7 @@ public class TunerConstants {
   private static final int kFrontRightSteerMotorId = RobotMap.SwerveConstants.Mod1.angleMotorID;
   private static final int kFrontRightEncoderId = RobotMap.SwerveConstants.Mod1.canCoderID;
   private static final Angle kFrontRightEncoderOffset =
-      Rotations.of(Constants.SwerveConstants.Mod1CANCoderOffset);
+      Radians.of(Constants.SwerveConstants.Mod1CANCoderOffset);
   private static final boolean kFrontRightSteerMotorInverted = true;
   private static final boolean kFrontRightEncoderInverted = false;
 
@@ -172,7 +171,7 @@ public class TunerConstants {
   private static final int kBackLeftSteerMotorId = RobotMap.SwerveConstants.Mod2.angleMotorID;
   private static final int kBackLeftEncoderId = RobotMap.SwerveConstants.Mod2.canCoderID;
   private static final Angle kBackLeftEncoderOffset =
-      Rotations.of(Constants.SwerveConstants.Mod2CANCoderOffset);
+      Radians.of(Constants.SwerveConstants.Mod2CANCoderOffset);
   private static final boolean kBackLeftSteerMotorInverted = true;
   private static final boolean kBackLeftEncoderInverted = false;
 
@@ -184,7 +183,7 @@ public class TunerConstants {
   private static final int kBackRightSteerMotorId = RobotMap.SwerveConstants.Mod3.angleMotorID;
   private static final int kBackRightEncoderId = RobotMap.SwerveConstants.Mod3.canCoderID;
   private static final Angle kBackRightEncoderOffset =
-      Rotations.of(Constants.SwerveConstants.Mod3CANCoderOffset);
+      Radians.of(Constants.SwerveConstants.Mod3CANCoderOffset);
   private static final boolean kBackRightSteerMotorInverted = true;
   private static final boolean kBackRightEncoderInverted = false;
 
