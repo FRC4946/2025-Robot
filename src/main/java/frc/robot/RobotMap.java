@@ -35,6 +35,5 @@ public final class RobotMap {
       public static final int canCoderID = 0;
       public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0);
     }
-
   }
 }
