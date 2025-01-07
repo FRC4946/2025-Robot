@@ -43,6 +43,10 @@ public final class Constants {
 
     public static final double wheelDiameter = 3.95;
 
+    // public static final double Mod0CANCoderOffset = -0.009;
+    // public static final double Mod1CANCoderOffset = 2.249;
+    // public static final double Mod2CANCoderOffset = 0.054;
+    // public static final double Mod3CANCoderOffset = -2.035;
     public static final double Mod0CANCoderOffset = 0;
     public static final double Mod1CANCoderOffset = 0;
     public static final double Mod2CANCoderOffset = 0;

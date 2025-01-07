@@ -98,7 +98,7 @@ public class TunerConstants {
   private static final Distance kWheelRadius =
       Inches.of(Constants.SwerveConstants.wheelDiameter / 2);
 
-  private static final boolean kInvertLeftSide = false;
+  private static final boolean kInvertLeftSide = true;
   private static final boolean kInvertRightSide = true;
 
   private static final int kPigeonId = RobotMap.SwerveConstants.pigeon2ID;
@@ -146,8 +146,7 @@ public class TunerConstants {
   private static final int kFrontLeftDriveMotorId = RobotMap.SwerveConstants.Mod0.driveMotorID;
   private static final int kFrontLeftSteerMotorId = RobotMap.SwerveConstants.Mod0.angleMotorID;
   private static final int kFrontLeftEncoderId = RobotMap.SwerveConstants.Mod0.canCoderID;
-  private static final Angle kFrontLeftEncoderOffset =
-      Radians.of(Constants.SwerveConstants.Mod0CANCoderOffset);
+  private static final Angle kFrontLeftEncoderOffset = Radians.of(0.008);
   private static final boolean kFrontLeftSteerMotorInverted = true;
   private static final boolean kFrontLeftEncoderInverted = false;
 
@@ -158,8 +157,7 @@ public class TunerConstants {
   private static final int kFrontRightDriveMotorId = RobotMap.SwerveConstants.Mod1.driveMotorID;
   private static final int kFrontRightSteerMotorId = RobotMap.SwerveConstants.Mod1.angleMotorID;
   private static final int kFrontRightEncoderId = RobotMap.SwerveConstants.Mod1.canCoderID;
-  private static final Angle kFrontRightEncoderOffset =
-      Rotations.of(Constants.SwerveConstants.Mod1CANCoderOffset);
+  private static final Angle kFrontRightEncoderOffset = Radians.of(-2.25);
   private static final boolean kFrontRightSteerMotorInverted = true;
   private static final boolean kFrontRightEncoderInverted = false;
 
@@ -170,8 +168,7 @@ public class TunerConstants {
   private static final int kBackLeftDriveMotorId = RobotMap.SwerveConstants.Mod2.driveMotorID;
   private static final int kBackLeftSteerMotorId = RobotMap.SwerveConstants.Mod2.angleMotorID;
   private static final int kBackLeftEncoderId = RobotMap.SwerveConstants.Mod2.canCoderID;
-  private static final Angle kBackLeftEncoderOffset =
-      Rotations.of(Constants.SwerveConstants.Mod2CANCoderOffset);
+  private static final Angle kBackLeftEncoderOffset = Radians.of(-0.052);
   private static final boolean kBackLeftSteerMotorInverted = true;
   private static final boolean kBackLeftEncoderInverted = false;
 
@@ -182,8 +179,7 @@ public class TunerConstants {
   private static final int kBackRightDriveMotorId = RobotMap.SwerveConstants.Mod3.driveMotorID;
   private static final int kBackRightSteerMotorId = RobotMap.SwerveConstants.Mod3.angleMotorID;
   private static final int kBackRightEncoderId = RobotMap.SwerveConstants.Mod3.canCoderID;
-  private static final Angle kBackRightEncoderOffset =
-      Rotations.of(Constants.SwerveConstants.Mod3CANCoderOffset);
+  private static final Angle kBackRightEncoderOffset = Radians.of(2.025);
   private static final boolean kBackRightSteerMotorInverted = true;
   private static final boolean kBackRightEncoderInverted = false;
 
