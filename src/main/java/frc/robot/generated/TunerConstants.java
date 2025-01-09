@@ -86,11 +86,11 @@ public class TunerConstants {
   // Theoretical free speed (m/s) at 12 V applied output;
   // This needs to be tuned to your individual robot
   public static final LinearVelocity kSpeedAt12Volts =
-      MetersPerSecond.of(4.69); // TODO FIND THIS AT SOME POINT
+    MetersPerSecond.of(6.004); // TODO FIND THIS AT SOME POINT
 
   // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
   // This may need to be tuned to your individual robot
-  private static final double kCoupleRatio = 3.8181818181818183;
+  private static final double kCoupleRatio = 5.2469; // 3.8181818181818183
 
   private static final double kDriveGearRatio = 5.2469; // for Zeus
   // (425 / 63); // TODO This is for the L2 gear ratio
