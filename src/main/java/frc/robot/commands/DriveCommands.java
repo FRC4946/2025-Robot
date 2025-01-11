@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.Constants;
 import frc.robot.subsystems.drive.Drive;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -38,8 +39,16 @@ import java.util.function.Supplier;
 
 public class DriveCommands {
   private static final double DEADBAND = 0.1;
-  private static final double ANGLE_KP = 5.0;
-  private static final double ANGLE_KD = 0.4;
+  private static final double DRIVE_KP = Constants.SwerveConstants.DriveKP;
+  private static final double DRIVE_KI = Constants.SwerveConstants.DriveKI;
+  private static final double DRIVE_KD = Constants.SwerveConstants.DriveKD;
+  private static final double DRIVE_TOLERANCE = Constants.SwerveConstants.DrivePIDTolerance;
+  private static final double DRIVE_MAX_VELOCITY = 6.004;
+  private static final double DRIVE_MAX_ACCELERATION = 10.0;
+  private static final double ANGLE_KP = Constants.SwerveConstants.AngleKP;
+  private static final double ANGLE_KI = Constants.SwerveConstants.AngleKI;
+  private static final double ANGLE_KD = Constants.SwerveConstants.AngleKI;
+  private static final double ANGLE_TOLERANCE = Constants.SwerveConstants.AnglePIDTolerance;
   private static final double ANGLE_MAX_VELOCITY = 8.0;
   private static final double ANGLE_MAX_ACCELERATION = 20.0;
   private static final double FF_START_DELAY = 2.0; // Secs
@@ -117,7 +126,7 @@ public class DriveCommands {
     ProfiledPIDController angleController =
         new ProfiledPIDController(
             ANGLE_KP,
-            0.0,
+            ANGLE_KI,
             ANGLE_KD,
             new TrapezoidProfile.Constraints(ANGLE_MAX_VELOCITY, ANGLE_MAX_ACCELERATION));
     angleController.enableContinuousInput(-Math.PI, Math.PI);
@@ -154,6 +163,69 @@ public class DriveCommands {
 
         // Reset PID controller when command starts
         .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()));
+  }
+
+  public static Command autoDrive(
+      Drive drive,
+      DoubleSupplier xSupplier,
+      DoubleSupplier ySupplier,
+      Supplier<Rotation2d> rotationSupplier) {
+
+    ProfiledPIDController xController =
+        new ProfiledPIDController(
+            DRIVE_KP,
+            DRIVE_KI,
+            DRIVE_KD,
+            new TrapezoidProfile.Constraints(DRIVE_MAX_VELOCITY, DRIVE_MAX_ACCELERATION));
+
+    ProfiledPIDController yController =
+        new ProfiledPIDController(
+            DRIVE_KP,
+            DRIVE_KI,
+            DRIVE_KD,
+            new TrapezoidProfile.Constraints(DRIVE_MAX_VELOCITY, DRIVE_MAX_ACCELERATION));
+
+    ProfiledPIDController angleController =
+        new ProfiledPIDController(
+            ANGLE_KP,
+            ANGLE_KI,
+            ANGLE_KD,
+            new TrapezoidProfile.Constraints(ANGLE_MAX_VELOCITY, ANGLE_MAX_ACCELERATION));
+    angleController.enableContinuousInput(-Math.PI, Math.PI);
+
+    return Commands.sequence(
+        Commands.runOnce(
+            () -> {
+              angleController.reset(drive.getRotation().getRadians());
+              xController.reset(drive.getRotation().getRadians());
+              yController.reset(drive.getRotation().getRadians());
+            }),
+        Commands.run(
+            () -> {
+              double x = xController.calculate(drive.getPose().getX(), xSupplier.getAsDouble());
+              double y = yController.calculate(drive.getPose().getY(), ySupplier.getAsDouble());
+              double omega =
+                  angleController.calculate(
+                      drive.getRotation().getRadians(), rotationSupplier.get().getRadians());
+
+              ChassisSpeeds speeds =
+                  new ChassisSpeeds(
+                      x * drive.getMaxLinearSpeedMetersPerSec(),
+                      y * drive.getMaxLinearSpeedMetersPerSec(),
+                      omega);
+
+              boolean isFlipped =
+                  DriverStation.getAlliance().isPresent()
+                      && DriverStation.getAlliance().get() == Alliance.Red;
+
+              drive.runVelocity(
+                  ChassisSpeeds.fromFieldRelativeSpeeds(
+                      speeds,
+                      isFlipped
+                          ? drive.getRotation().plus(new Rotation2d(Math.PI))
+                          : drive.getRotation()));
+            },
+            drive));
   }
 
   /**

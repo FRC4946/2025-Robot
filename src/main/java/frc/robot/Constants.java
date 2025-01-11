@@ -47,5 +47,15 @@ public final class Constants {
     public static final double Mod1CANCoderOffset = 0;
     public static final double Mod2CANCoderOffset = 0;
     public static final double Mod3CANCoderOffset = 0;
+
+    public static final double DriveKP = 0;
+    public static final double DriveKI = 0;
+    public static final double DriveKD = 0;
+    public static final double DrivePIDTolerance = 0;
+
+    public static final double AngleKP = 5.0;
+    public static final double AngleKI = 0;
+    public static final double AngleKD = 0.4;
+    public static final double AnglePIDTolerance = 0;
   }
 }
