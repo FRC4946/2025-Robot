@@ -24,7 +24,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.Vision.Limelight;
+import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
@@ -43,10 +44,11 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
  */
 public class RobotContainer {
     // Subsystems
-    private final Drive drive;
+    private final Drivetrain s_Drivetrain;
+    private final Limelight s_Limelight = new Limelight();
 
     // Controller
-    private final CommandXboxController controller = new CommandXboxController(0);
+    private final CommandXboxController driver = new CommandXboxController(0);
 
     // Dashboard inputs
     private final LoggedDashboardChooser<Command> autoChooser;
@@ -58,7 +60,7 @@ public class RobotContainer {
         switch (Constants.currentMode) {
             case REAL:
                 // Real robot, instantiate hardware IO implementations
-                drive = new Drive(
+                s_Drivetrain = new Drivetrain(
                         new GyroIOPigeon2(),
                         new ModuleIOTalonFX(TunerConstants.FrontLeft),
                         new ModuleIOTalonFX(TunerConstants.FrontRight),
@@ -68,7 +70,7 @@ public class RobotContainer {
 
             case SIM:
                 // Sim robot, instantiate physics sim IO implementations
-                drive = new Drive(
+                s_Drivetrain = new Drivetrain(
                         new GyroIO() {
                         },
                         new ModuleIOSim(TunerConstants.FrontLeft),
@@ -79,7 +81,7 @@ public class RobotContainer {
 
             default:
                 // Replayed robot, disable IO implementations
-                drive = new Drive(
+                s_Drivetrain = new Drivetrain(
                         new GyroIO() {
                         },
                         new ModuleIO() {
@@ -98,19 +100,19 @@ public class RobotContainer {
 
         // Set up SysId routines
         autoChooser.addOption(
-                "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
+                "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(s_Drivetrain));
         autoChooser.addOption(
-                "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive));
+                "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(s_Drivetrain));
         autoChooser.addOption(
                 "Drive SysId (Quasistatic Forward)",
-                drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+                s_Drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
         autoChooser.addOption(
                 "Drive SysId (Quasistatic Reverse)",
-                drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+                s_Drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
         autoChooser.addOption(
-                "Drive SysId (Dynamic Forward)", drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
+                "Drive SysId (Dynamic Forward)", s_Drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
         autoChooser.addOption(
-                "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+                "Drive SysId (Dynamic Reverse)", s_Drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
         // Configure the button bindings
         configureButtonBindings();
@@ -126,34 +128,34 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         // Default command, normal field-relative drive
-        drive.setDefaultCommand(
+        s_Drivetrain.setDefaultCommand(
                 DriveCommands.joystickDrive(
-                        drive,
-                        () -> -controller.getLeftY(),
-                        () -> -controller.getLeftX(),
-                        () -> -controller.getRightX()));
+                        s_Drivetrain,
+                        () -> -driver.getLeftY(),
+                        () -> -driver.getLeftX(),
+                        () -> -driver.getRightX()));
 
         // Lock to 0° when A button is held
-        controller
+        driver
                 .a()
                 .whileTrue(
                         DriveCommands.joystickDriveAtAngle(
-                                drive,
-                                () -> -controller.getLeftY(),
-                                () -> -controller.getLeftX(),
+                                s_Drivetrain,
+                                () -> -driver.getLeftY(),
+                                () -> -driver.getLeftX(),
                                 () -> new Rotation2d()));
 
         // Switch to X pattern when X button is pressed
-        controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
+        driver.x().onTrue(Commands.runOnce(s_Drivetrain::stopWithX, s_Drivetrain));
 
         // Reset gyro to 0° when B button is pressed
-        controller
+        driver
                 .start()
                 .onTrue(
                         Commands.runOnce(
-                                () -> drive.setPose(
-                                        new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
-                                drive)
+                                () -> s_Drivetrain.setPose(
+                                        new Pose2d(s_Drivetrain.getPose().getTranslation(), new Rotation2d())),
+                                s_Drivetrain)
                                 .ignoringDisable(true));
     }
 
