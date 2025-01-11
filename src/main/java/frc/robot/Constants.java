@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj.RobotBase;
  */
 public final class Constants {
 
-  public static final Mode simMode = Mode.REAL;
+  public static final Mode simMode = Mode.SIM;
   public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
 
   public static enum Mode {
@@ -48,14 +48,14 @@ public final class Constants {
     public static final double Mod2CANCoderOffset = -0.052;
     public static final double Mod3CANCoderOffset = 2.025;
 
-    public static final double DriveKP = 0;
+    public static final double DriveKP = 5;
     public static final double DriveKI = 0;
-    public static final double DriveKD = 0;
+    public static final double DriveKD = 0.4;
     public static final double DrivePIDTolerance = 0;
 
-    public static final double AngleKP = 5.0;
-    public static final double AngleKI = 0;
+    public static final double AngleKP = 10.0;
+    public static final double AngleKI = 0.1;
     public static final double AngleKD = 0.4;
-    public static final double AnglePIDTolerance = 0;
+    public static final double AnglePIDTolerance = 1;
   }
 }
